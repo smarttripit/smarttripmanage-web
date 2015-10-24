@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Turnip System后台管理系统</title>
+	<title>后台管理系统-香油网络</title>
 	<link rel="stylesheet" type="text/css" href="${contextPath}/static/framework/jeasyui/themes/default/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${contextPath}/static/framework/jeasyui/themes/icon.css">
 	<script type="text/javascript" src="${contextPath}/static/framework/jeasyui/jquery.min.js"></script>
