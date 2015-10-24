@@ -16,6 +16,5 @@ public class TestSLF4J {
 		for(int i=1; i<10000; i++){
 			logger.info("hello world {}", Math.random());
 		}
-		
 	}
 }
