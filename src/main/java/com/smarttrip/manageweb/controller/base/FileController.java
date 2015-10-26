@@ -1,4 +1,4 @@
-package com.smarttrip.manageweb.controller;
+package com.smarttrip.manageweb.controller.base;
 
 import java.io.File;
 import java.io.IOException;
