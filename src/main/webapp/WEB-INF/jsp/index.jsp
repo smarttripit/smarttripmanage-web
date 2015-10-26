@@ -19,9 +19,6 @@
 	src="${contextPath}/static/framework/jeasyui/jquery.easyui.min.js"></script>
 </head>
 <body>
-	<!-- <div style="width:100%;height:70px;background:#2D3E50;font:white">
-		XXXX后台管理系统
-	</div> -->
 	<div class="easyui-layout" style="width: 100%; height:100%;">
 		<div region="north" split="true" class="easyui-accordion" border="false">
 			<div style="height:70px;background:#2D3E50;color:white;padding:0 0 0 20px;line-height:65px;font-size:25px;font-family:微软雅黑;">
@@ -30,14 +27,14 @@
 		</div>
 		<!-- west region 开始 -->
 		<div region="west" split="true" title="菜单导航" class="easyui-accordion" style="width:250px;">
-			<div title="经典线路管理" selected="true" style="overflow: auto;">
+			<div title="经典线路管理" selected="true" style="width:250px;">
 				<ul id="tt1" class="easyui-tree">
-					<li><div onclick="addTab('route-list', '/route/listPage')">经典线路列表</div></li>
+					<li><div onclick="addTab('线路列表', '/route/listPage')">经典线路列表</div></li>
 				</ul>
 			</div>
-			<div title="游客管理">
+			<div title="游客管理" style="width:250px;">
 			</div>
-			<div title="评论管理">
+			<div title="评论管理" style="width:250px;">
 			</div>
 		</div>
 		<!-- west region 结束 -->
