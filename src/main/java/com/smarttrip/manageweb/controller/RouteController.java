@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smarttrip.domain.User;
 import com.smarttrip.manageweb.common.Result;
+import com.smarttrip.service.IRouteService;
 import com.smarttrip.service.IUserService;
 
 
@@ -27,6 +28,9 @@ public class RouteController {
 	private Logger logger = LoggerFactory.getLogger(RouteController.class);
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IRouteService routeService;
+	
 	
 	/**
 	 * 显示经典线路列表
@@ -74,5 +78,37 @@ public class RouteController {
 		data.put("","");
 		return rtn;*/
 	}
+	
+	/**
+	 * 根据线路的id将一条线路停用/启用
+	 * @author gaoweibupt@gmail.com
+	 * 
+	 * */
+	@RequestMapping("/reviseStatus")
+	@ResponseBody
+	public Result deleteRouteById(HttpServletRequest request,Model model){
+		Result result = new Result();
+		String routeId = request.getParameter("routeId");
+		String statusString = request.getParameter("status");
+		char status = statusString.charAt(0);
+		if (routeService.updateStatusByRouteId(routeId, status) == 1){
+			return result;
+		}
+		else{
+			result.setStatus("failed");
+			return result;
+		}
+	}
+	
+	/**
+	 * 新建一个经典路线，但是不包含其行程信息
+	 * 
+	 * @author gaoweibupt@gmail.com
+	 * */
+//	@RequestMapping("/newRoute")
+//	@ResponseBody
+//	public Result newRoute(HttpServletRequest request,Model model){
+//		
+//	}
 	
 }
