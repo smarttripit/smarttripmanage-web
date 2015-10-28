@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smarttrip.domain.User;
+import com.smarttrip.domain.Route;
 import com.smarttrip.manageweb.common.Result;
 import com.smarttrip.service.IRouteService;
 import com.smarttrip.service.IUserService;
+import com.smarttrip.util.UUIDUtils;
 
 
 @Controller
@@ -105,10 +106,56 @@ public class RouteController {
 	 * 
 	 * @author gaoweibupt@gmail.com
 	 * */
-//	@RequestMapping("/newRoute")
-//	@ResponseBody
-//	public Result newRoute(HttpServletRequest request,Model model){
-//		
-//	}
+	@RequestMapping("/newRoute")
+	@ResponseBody
+	public Result newRoute(Model model, Route route){
+		Result result = new Result();
+		route.setRegionId(UUIDUtils.getUUID());
+		if (routeService.insert(route) == 1){
+			return result;
+		}
+		else{
+			result.setStatus("failed");
+			return result;
+		}
+	}
+	
+	/**
+	 * 修改经典路线的信息
+	 * 
+	 * @author gaoweibupt@gamil.com
+	 * */
+	@RequestMapping("/updateRoute")
+	@ResponseBody
+	public Result updateRoute(Model model, Route route){
+		Result result = new Result();
+		if (routeService.updateByPrimaryKey(route) == 1){
+			return result;
+		}
+		else{
+			result.setStatus("failed");
+			return result;
+		}
+	}
+
+	/**
+	 * 根据经典线路的routeId 获取经典线路的详细信息
+	 * @author gaoweibupt@gmail.com
+	 * */
+	@RequestMapping("/getRoute")
+	@ResponseBody
+	public Result getRouteById(HttpServletRequest request,Model model){
+		String routeId = request.getParameter("routeId");
+		Route route = routeService.selectByPrimaryKey(routeId);
+		Result result = new Result();
+		if (route == null){
+			result.setStatus("failed");
+			return result;
+		}
+		else{
+			result.setData(route);
+			return result;
+		}
+	}
 	
 }
