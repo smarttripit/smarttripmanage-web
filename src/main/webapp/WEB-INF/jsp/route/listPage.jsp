@@ -21,6 +21,7 @@
 		fitColumns="true" 
 		singleSelect="true"
 		toolbar="#toolbar"
+		fit="true"
 		rownumbers="true" 
 		pagination="true">
 	<thead>
