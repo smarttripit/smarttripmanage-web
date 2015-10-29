@@ -17,13 +17,14 @@
 </head>
 <body>
 	<table id="tt" class="easyui-datagrid" style="width:100%;height:auto;"
-		url="/route/getByPage"
-		fitColumns="true" 
-		singleSelect="true"
-		toolbar="#toolbar"
-		fit="true"
-		rownumbers="true" 
-		pagination="true">
+		data-options="
+			url:'/route/getByPage',
+			fitColumns:true,
+			singleSelect:true,
+			toolbar:'#toolba',
+			fit:true,
+			rownumbers:true,
+			pagination:true">
 	<thead>
 		<tr>
 			<th field="name" width="50">名称</th>
@@ -50,8 +51,8 @@
 		<a href="#" class="easyui-linkbutton" iconCls="icon-search">Search</a>
 	</div>
 	<div>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">新建线路</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">修改线路</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newRoute()">新建线路</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editRoute()">修改线路</a>
 	</div>
 </div>
 </body>

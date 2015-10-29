@@ -5,9 +5,6 @@
 <meta charset="UTF-8">
 <title>后台管理系统-香油网络</title>
 <style type="text/css">
-	body{
-		
-	}
 </style>
 <link rel="stylesheet" type="text/css"
 	href="${contextPath}/static/framework/jeasyui/themes/default/easyui.css">
@@ -41,7 +38,7 @@
 
 		<!-- center region 开始 -->
 		<div id="content" region="center" style="padding: 5px;">
-			<div id="content-tab" class="easyui-tabs" style="width:100%; height:100%;">
+			<div id="content-tab" class="easyui-tabs" style="width:100%; height:100%;" data-options="fit:true,border:false,plain:true">
 				<div title="欢迎使用" style="padding: 10px;">
 					<div>欢迎使用周游趣后台管理系统！</div>
 				</div>

@@ -1,25 +1,27 @@
 package com.smarttrip.manageweb.controller.base;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.smarttrip.platform.file.AliyunFileManager;
 
 /**
  * 文件上传和下载
+ * 
  * @author songjie
  *
  */
@@ -27,83 +29,101 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/file")
 public class FileController {
 	private Logger logger = LoggerFactory.getLogger(FileController.class);
-	
+
+	@Autowired
+	AliyunFileManager aliyunFileManager;
+
 	/**
-	 * 跳转到文件上传页面
-	 * @return
-	 */
-	@RequestMapping("/gotoUploadPage")
-	public String gotoUploadPage(){
-		return "file/uploadPage";
-	}
-	
-	/**
-	 * 接收上传的非可执行文件
+	 * ckeditor中的图片上传
+	 * 
 	 * @param request
 	 * @param model
 	 * @return
+	 * @throws IOException
 	 */
-	@RequestMapping(value = "/upload/notExe")
-	@ResponseBody
-	public Map<String, String> uploadNotExe(HttpServletRequest request,Model model,
-			@RequestParam(value="fileUpload") MultipartFile fileUpload,
-			@RequestParam(value="title") String title){
+	@RequestMapping(value = "/ckeditorUpload")
+	public Map<String, String> ckeditorUpload(HttpServletRequest request, Model model,
+			@RequestParam(value = "upload") MultipartFile fileUpload,
+			HttpServletResponse response)throws IOException {
+		logger.debug("进入ckeditorUpload方法");
+		response.setContentType("text/html; charset=UTF-8");
+		response.setHeader("Cache-Control", "no-cache");
+		String[] allowedFileType = new String[]{"jpg", "jpeg", "png", "gif"};//允许上传的文件类型
+		PrintWriter out = response.getWriter();
 		Map<String, String> rtn = new HashMap<String, String>();
 		rtn.put("status", "success");
 		rtn.put("tips", "文件上传成功");
-		
-		if(title == null  ||  title.equals("")){
-			rtn.put("status", "failed");
-			rtn.put("tips", "title不能为空");
-			return rtn;
+		String fileValidateResult = validateUploadFile(fileUpload, allowedFileType);
+		if (!fileValidateResult.equals("ok")) {
+			out.println("<script type=\"text/javascript\">");
+			out.println("window.alert('"+fileValidateResult+"');");
+			out.println("</script>");
+		}else{
+			String fileId = saveFile(fileUpload);
+			//将上传的图片的url返回给ckeditor
+			String fileUrl = getOSSBucketUrl() + "/" + fileId;
+			String callback = request.getParameter("CKEditorFuncNum");//CKEditorFuncNum是回调时显示的位置，这个参数必须有
+			out.println("<script type=\"text/javascript\">");
+			out.println("window.parent.CKEDITOR.tools.callFunction(" + callback + ",'" + fileUrl + "',''" + ")");
+			out.println("</script>");
 		}
-		
-		String fileValidateResult = this.validateUploadFile(fileUpload);
-		if(!fileValidateResult.equals("ok")){
-			rtn.put("status", "failed");
-			rtn.put("tips", fileValidateResult);
-			return rtn;
-		}
-		
-		String saveResultString = saveFile(fileUpload);
-		if(!saveResultString.equals("ok")){
-			rtn.put("status", "failed");
-			rtn.put("tips", saveResultString);
-			return rtn;
-		}
-		
+		out.flush();
+		out.close();
+		logger.debug("退出ckeditorUpload方法");
 		return rtn;
 	}
-	
+
 	/**
-	 * 校验用户上传的文件
+	 * 校验文件
+	 * @author songjiesdnu@163.com
 	 * @param fileUpload
-	 * @return ok:符合要求  其他：返回提示信息
+	 * @param allowedFileTypes
+	 * @return ok：文件通过校验；否则，返回错误提示信息
 	 */
-	private String validateUploadFile(MultipartFile fileUpload){
-		if(fileUpload.isEmpty()){
-			return "上传的文件为空";
+	private String validateUploadFile(MultipartFile fileUpload, String[] allowedFileTypes) {
+		if (fileUpload.isEmpty()) {
+			logger.info("上传的文件内容为空");
+			return "上传的文件内容为空";
 		}
-		
-		return "ok";
+		String originalFileName = fileUpload.getOriginalFilename();
+		String fileType = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+		for(String allowFileType: allowedFileTypes){
+			if(fileType.equals(allowFileType)){
+				return "ok";
+			}
+		}
+		String allowedFileTypeStr = "";
+		for(String allowFileType: allowedFileTypes){
+			allowedFileTypeStr += allowFileType + "、";
+		}
+		allowedFileTypeStr = allowedFileTypeStr.substring(0, allowedFileTypeStr.length()-1).toString();
+		return "只允许上传" + allowedFileTypeStr + "文件";
+	}
+
+	/**
+	 * 保存用户上传的文件到阿里云OSS
+	 * @param fileUpload
+	 * @return fileId
+	 * @throws IOException
+	 */
+	private String saveFile(MultipartFile fileUpload) throws IOException {
+		logger.debug("进入saveFile方法");
+		String fileName = fileUpload.getOriginalFilename();
+		fileUpload.getContentType();
+		String fileId = aliyunFileManager.upload(fileName,
+				fileUpload.getBytes());
+		logger.debug("退出saveFile方法");
+		return fileId;
 	}
 	
 	/**
-	 * 保存用户上传的文件
-	 * @param fileUpload
-	 * @return
+	 * 获得bucket在阿里云OSS上的域名地址
+	 * @author songjiesdnu@163.com
+	 * @return 类似于：http://bucket-songjie.oss-cn-beijing.aliyuncs.com
 	 */
-	private String saveFile(MultipartFile fileUpload){
-		String fileName = fileUpload.getOriginalFilename();
-		fileUpload.getContentType();
-		File file =  new File("E:/08file/" + fileName);
-		try {
-			FileUtils.writeByteArrayToFile(file, fileUpload.getBytes());
-		} catch (IOException e) {
-			logger.error("保存上传的文件出错", e);
-			return "保存上传的文件的时候出错";
-		}
-		
-		return "ok";
+	private String getOSSBucketUrl(){
+		String bucketName = aliyunFileManager.getBucketName();
+		String endPoint = aliyunFileManager.getEndpoint();
+		return endPoint.substring(0, endPoint.indexOf("//") + 2) + bucketName + "." + endPoint.substring(endPoint.indexOf("//") + 2);
 	}
 }
