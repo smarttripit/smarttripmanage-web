@@ -31,6 +31,17 @@ public class RouteController {
 	@Autowired
 	private IRouteService routeService;
 	
+	/**
+	 * 跳转到新建经典线路的页面
+	 * @author songjiesdnu@163.com
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/newRoute")
+	public String newRoute(HttpServletRequest request,Model model){
+		return "route/newRoute";
+	}
 	
 	/**
 	 * 显示经典线路列表
