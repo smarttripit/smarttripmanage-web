@@ -39,9 +39,9 @@ public class RouteController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/newRoute")
+	@RequestMapping("/newRoutePage")
 	public String newRoute(HttpServletRequest request,Model model){
-		return "route/newRoute";
+		return "route/newRoutePage";
 	}
 	
 	/**
