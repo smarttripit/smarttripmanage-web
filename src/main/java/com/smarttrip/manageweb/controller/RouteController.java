@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.smarttrip.domain.Route;
 import com.smarttrip.manageweb.common.Result;
 import com.smarttrip.service.IRouteService;
-import com.smarttrip.service.IUserService;
+import com.smarttrip.service.IRouteThemeService;
 import com.smarttrip.util.UUIDUtils;
 
 
@@ -27,11 +28,12 @@ import com.smarttrip.util.UUIDUtils;
 @RequestMapping("/route")
 public class RouteController {
 	private Logger logger = LoggerFactory.getLogger(RouteController.class);
-	@Autowired
-	private IUserService userService;
+
 	@Autowired
 	private IRouteService routeService;
 	
+	@Autowired
+	private IRouteThemeService routeThemeService;
 	/**
 	 * 跳转到新建经典线路的页面
 	 * @author songjiesdnu@163.com
@@ -58,10 +60,52 @@ public class RouteController {
 	
 	@RequestMapping("/getByPage")
 	@ResponseBody
-	public Map<String, Object> getByPage(@RequestParam(value="page",required=false) int page,
+	public Map<String, Object> getByPage(@RequestParam(value="status", required=false)String status,
+										 @RequestParam(value="name", required=false)String name,
+										 @RequestParam(value="regionId", required=false)String regionId,
+										 @RequestParam(value="themeId", required=false)String themeId,
+										 @RequestParam(value="period", required=false)String period,
+										 @RequestParam(value="page",required=false) int page,
 										 @RequestParam(value="rows",required=false) int rows){
 		logger.debug("进入getByPage方法");
 		Map<String, Object> map = new HashMap<String, Object>();
+		/**
+		 * 数据库查询代码，需要打开注释，将下面的代码删掉
+		 * 
+		 * */
+		/*
+		String[] regionIds = regionId.split(",");
+		String[] themeIds = themeId.split(",");
+		String[] periodString = period.split(","); 
+		int[] periods = new int[periodString.length];
+		for (int i = 0; i < periodString.length; i++){
+			periods[i] = Integer.parseInt(periodString[i]);
+		}
+		List<String> routeId = routeThemeService.selectRouteId(themeIds);
+		String[] routeIds = new String[routeId.size()];
+		for(int i = 0; i < routeIds.length; i++){
+			routeIds[i] = routeId.get(i);
+		}
+		PageInfo<Route> pageInfo = routeService.selectByCondition(status, name, regionIds, routeIds, periods, page, rows);
+		map.put("total", pageInfo.getTotal());
+		List<Object> rowData = new ArrayList<>();
+		List<Route> routeRecord = pageInfo.getList();
+		for(int i=0; i<rows; i++){
+			Map<String, String> oneRow = new HashMap<String, String>();
+			oneRow.put("name", routeRecord.get(i).getName());
+			oneRow.put("feature", routeRecord.get(i).getFeature());
+			oneRow.put("theme", "农村-亲子");
+			oneRow.put("region", "北京-门头沟");
+			oneRow.put("period", routeRecord.get(i).getPeriod().toString());
+			oneRow.put("commentCount", routeRecord.get(i).getCommentCount().toString());
+			oneRow.put("commetRatio", routeRecord.get(i).getCommetRatio().toString());
+			oneRow.put("purchaseCount", routeRecord.get(i).getPurchaseCount().toString());
+			oneRow.put("displayOrder", routeRecord.get(i).getDisplayOrder().toString());
+			oneRow.put("status", "正常");
+			rowData.add(oneRow);
+		}
+		map.put("rows", rowData);
+		*/
 		map.put("total", 201);
 		
 		List<Map<String, String>> rowData = new ArrayList<Map<String, String>>();
@@ -81,6 +125,8 @@ public class RouteController {
 			
 		}
 		 map.put("rows", rowData);
+		
+		
 		
 		logger.debug("退出getByPage方法");
 		return map;
