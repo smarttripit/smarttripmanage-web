@@ -54,6 +54,42 @@
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newRoute()">新建线路</a>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editRoute()">修改线路</a>
 	</div>
+	<B>筛选条件：</B><br>
+	<span style="font-weight:bold;">地区：</span>
+		<select id="firstRegion">
+			<option value="">请选择</option>
+			<option value="北京">北京</option>
+		</select>
+		<select id="secondRegion">
+			<option value="">请选择</option>
+			<option value="怀柔">怀柔</option>
+		</select>
+	&nbsp&nbsp<span style="font-weight:bold;">线路名称：</span>
+		<input id="name" style="border:1px solid #ccc">
+	&nbsp&nbsp<span style="font-weight:bold;">线路主题：</span>
+		<select id="theme">
+			<option value="">请选择</option>
+			<option value="烧烤">烧烤</option>
+			<option value="露营">露营</option>
+		</select>
+	&nbsp&nbsp<span style="font-weight:bold;">线路天数：</span>
+		<input id="periodStart" type="text" maxlength="2" style="width:26px;border:1px solid #ccc">
+		-
+		<input id="periodEnd" type="text" maxlength="2" style="width:26px;border:1px solid #ccc">
+	&nbsp&nbsp<span style="font-weight:bold;">线路状态:</span>
+		<select id="status">
+			<option value="">全部</option>
+			<option value="有效">有效</option>
+			<option value="无效">无效</option>
+		</select>
+	&nbsp&nbsp<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="doSearch()">查询</a>
 </div>
+<script type="text/javascript">
+	function doSearch(){
+		$('#tt').datagrid('load',{
+			
+		});
+	}
+</script>
 </body>
 </html>
