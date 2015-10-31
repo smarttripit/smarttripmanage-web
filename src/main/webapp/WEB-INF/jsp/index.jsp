@@ -30,6 +30,9 @@
 				</ul>
 			</div>
 			<div title="游客管理" style="width:250px;">
+				<ul id="tt2" class="easyui-tree">
+					<li><div onclick="addTab('游客列表', '/visitor/visitorPage')">游客信息列表</div></li>
+				</ul>
 			</div>
 			<div title="评论管理" style="width:250px;">
 			</div>

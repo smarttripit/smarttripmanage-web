@@ -21,7 +21,7 @@
 			url:'/route/getByPage',
 			fitColumns:true,
 			singleSelect:true,
-			toolbar:'#toolba',
+			toolbar:'#toolbar',
 			fit:true,
 			rownumbers:true,
 			pagination:true">

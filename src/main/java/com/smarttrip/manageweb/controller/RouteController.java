@@ -64,7 +64,7 @@ public class RouteController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("total", 201);
 		
-		List rowData = new ArrayList();
+		List<Map<String, String>> rowData = new ArrayList<Map<String, String>>();
 		for(int i=0; i<rows; i++){
 			Map<String, String> oneRow = new HashMap<String, String>();
 			oneRow.put("name", "爨底下黄岭西");
