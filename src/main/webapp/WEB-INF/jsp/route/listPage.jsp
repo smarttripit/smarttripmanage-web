@@ -3,19 +3,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<%@include file="../pub/header.jsp" %>
+<%@include file="../common/header.jsp" %>
 <meta charset="UTF-8">
 <title>经典线路列表页</title>
 <style type="text/css">
 </style>
-<link rel="stylesheet" type="text/css"
-	href="${contextPath}/static/framework/jeasyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css"
-	href="${contextPath}/static/framework/jeasyui/themes/icon.css">
-<script type="text/javascript"
-	src="${contextPath}/static/framework/jeasyui/jquery.min.js"></script>
-<script type="text/javascript"
-	src="${contextPath}/static/framework/jeasyui/jquery.easyui.min.js"></script>
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit:true,selected:true">
@@ -238,16 +230,6 @@
 	// 显示一条经典线路的详细信息
 	function showRouteDetails(routeId){
 		self.parent.addTab("详情：经典线路", "/route/routeDetail?routeId=" + routeId);
-	}
-	
-	// 消息提示框
-	function showSlideMessage(msg){
-	    $.messager.show({
-	        title:'提示',
-	        msg:msg,
-	        timeout:4000,
-	        showType:'slide'
-	    });
 	}
 </script>
 </body>

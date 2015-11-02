@@ -1,3 +1,14 @@
+// 设置默认ajax请求失败处理方法
+$.ajaxSetup({
+	error: function(data, status, exception){
+		var errorMsg = '';
+		if(data && data.responseText){
+			errorMsg = (eval('('+data.responseText+')')).string;
+			$.messager.alert('错误信息', errorMsg, 'error');
+		}
+	}
+});
+
 // 保持session不失效
 function keepSessionAlive(){
 	window.setInterval(function(){
@@ -25,4 +36,3 @@ function showSlideMessage(msg){
         showType:'slide'
     });
 }
-

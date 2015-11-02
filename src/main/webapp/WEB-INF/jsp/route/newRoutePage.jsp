@@ -2,6 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<%@include file="../common/header.jsp" %>
 <meta charset="UTF-8">
 <title>新建经典线路</title>
 <style type="text/css">
@@ -12,13 +13,6 @@
 		font-weight: bold;
 	}
 </style>
-<link rel="stylesheet" type="text/css" href="/static/css/common.css">
-<link rel="stylesheet" type="text/css" href="/static/framework/jeasyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="/static/framework/jeasyui/themes/icon.css">
-<script type="text/javascript" src="/static/js/common.js"></script>
-<script type="text/javascript" src="/static/framework/jeasyui/jquery.min.js"></script>
-<script type="text/javascript" src="/static/framework/jeasyui/jquery.easyui.min.js"></script>
-<script src="/static/framework/ckeditor/ckeditor.js"></script>
 </head>
 <body>
 	<form id="createRouteForm" method="post">

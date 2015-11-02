@@ -2,15 +2,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<%@include file="../common/header.jsp" %>
 <meta charset="UTF-8">
 <title>修改经典线路</title>
 <style type="text/css">
 </style>
-	<link rel="stylesheet" type="text/css" href="/static/framework/jeasyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="/static/framework/jeasyui/themes/icon.css">
-	<script type="text/javascript" src="/static/framework/jeasyui/jquery.min.js"></script>
-	<script type="text/javascript" src="/static/framework/jeasyui/jquery.easyui.min.js"></script>
-	<script src="/static/framework/ckeditor/ckeditor.js"></script>
 </head>
 <body>
 	    <form id="ff" method="post">
