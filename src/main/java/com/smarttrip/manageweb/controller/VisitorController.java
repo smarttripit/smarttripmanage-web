@@ -1,6 +1,5 @@
 package com.smarttrip.manageweb.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,12 @@ public class VisitorController {
 	@Autowired
 	private IVisitorService visitorService;
 	private ICommentService commentService;
+	
+	@RequestMapping("/visitorPage")
+	public String visitorPage(HttpServletRequest request,Model model){
+		return "visitor/visitorPage";
+	}
+	
 	
 	@RequestMapping("/reviseVisitorStatus")
 	@ResponseBody
@@ -56,14 +61,11 @@ public class VisitorController {
 		}
 		String[] commentIds = commentId.split(",");
 		this.commentService.deleteCommentByVisitorId(visitorId,commentIds);
-		result.setData("success");
+		result.setStatus("success");
 		return result;	
 	}
 	
-	@RequestMapping("/visitorPage")
-	public String visitorPage(HttpServletRequest request,Model model){
-		return "visitor/visitorPage";
-	}
+	
 	@RequestMapping("/getVisitorByPage")
 	@ResponseBody
 	public Map<String, Object> getVisitorByPage(@RequestParam(value="page",required=false) int page,
@@ -75,16 +77,17 @@ public class VisitorController {
 		PageInfo<Visitor> pageInfo = this.visitorService.selectVisitorByPage(page,rows,name,mobileNo,email);
 		map.put("total", pageInfo.getTotal());
 		List<Visitor> visitorInfos = pageInfo.getList();
-		List<Map<String, String>> rowData = new ArrayList<Map<String, String>>();
-		for(Visitor visitorInfo : visitorInfos){
-			Map<String, String> oneRow = new HashMap<String, String>();
-			oneRow.put("name", visitorInfo.getName());
-			oneRow.put("realName", visitorInfo.getRealName());
-			oneRow.put("email", visitorInfo.getEmail());
-			oneRow.put("mobileNo", visitorInfo.getMobileNo());
-			rowData.add(oneRow);
-		}
-		map.put("rows", rowData);
+//		List<Map<String, String>> rowData = new ArrayList<Map<String, String>>();
+//		for(Visitor visitorInfo : visitorInfos){
+//			Map<String, String> oneRow = new HashMap<String, String>();
+//			oneRow.put("name", visitorInfo.getName());
+//			oneRow.put("realName", visitorInfo.getRealName());
+//			oneRow.put("email", visitorInfo.getEmail());
+//			oneRow.put("mobileNo", visitorInfo.getMobileNo());
+//			rowData.add(oneRow);
+//		}
+//		map.put("rows", rowData);
+		map.put("rows", visitorInfos);
 		return map;	
 	}
 

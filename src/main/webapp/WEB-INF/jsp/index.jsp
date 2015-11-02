@@ -35,6 +35,9 @@
 				</ul>
 			</div>
 			<div title="评论管理" style="width:250px;">
+				<ul id="tt3" class="easyui-tree">
+					<li><div onclick="addTab('评论列表', '/comment/commentPage')">评论信息列表</div></li>
+				</ul>
 			</div>
 		</div>
 		<!-- west region 结束 -->

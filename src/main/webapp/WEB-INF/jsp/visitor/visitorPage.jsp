@@ -27,10 +27,12 @@
 			pagination:true">
 	<thead>
 		<tr>
+			<th field="visitorId" width="50">游客ID</th>
 			<th field="name" width="50">用户名</th>
 			<th field="realName" width="50">真实姓名</th>
 			<th field="email" width="50">邮箱</th>
-			<th field="mobileNo" width="50">手机号</th>	
+			<th field="mobileNo" width="50">手机号</th>
+			<th field="status" width="50">游客状态</th>	
 		</tr>
 	</thead>
 </table>
@@ -43,9 +45,9 @@
 	<span>邮箱:</span>
 	<input id="email" style="line-height:26px;border:1px solid #ccc">
 	<a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">查找</a>
+	<a href="#" class="easyui-linkbutton"  plain="true" onclick="changeStatus(1)">锁定</a>
+	<a href="#" class="easyui-linkbutton"  plain="true" onclick="changeStatus(0)">解锁</a>
 	</div>
-	<a href="#" class="easyui-linkbutton"  plain="true" onclick="newUser()">锁定</a>
-	<a href="#" class="easyui-linkbutton"  plain="true" onclick="editUser()">解锁</a>
 </div>
 
 <script type="text/javascript">
@@ -56,10 +58,25 @@ function doSearch(){
 		email: $('#email').val()
 	});
 }
-function changeStatus(){
-	var row = $('#dg').datagrid('getSelected');
+
+function changeStatus(status){
+	var row = $('#tt').datagrid('getSelected');
 	if (row){
-		
+		$.messager.defaults = { ok: "确认", cancel: "取消" };
+		$.messager.confirm('确定','您确定更改游客状态吗?',function(r){
+			if (r){
+				$.post('/visitor/reviseVisitorStatus',{visitorId:row.visitorId,status:status},function(result){
+					if (result.status == "success"){
+						$('#tt').datagrid('reload');	// reload the user data
+					} else {
+						$.messager.show({	// show error message
+							title: 'Error',
+							msg: result.tipCode
+						});
+					}
+				},'json');
+			}
+		});
 	}
 }
 </script>
