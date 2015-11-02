@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.github.pagehelper.PageInfo;
-import com.smarttrip.domain.Comment;
-import com.smarttrip.domain.Visitor;
+//import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.ResponseBody;
+//
+//import com.github.pagehelper.PageInfo;
+//import com.smarttrip.domain.Comment;
+//import com.smarttrip.domain.Visitor;
 import com.smarttrip.service.ICommentService;
 import com.smarttrip.service.IVisitorService;
 
