@@ -1,3 +1,6 @@
+//自定义的ckeditor配置文件路径
+var ckeditorConfigFile = "/static/framework/custom/ckeditor_config.js";
+
 // 设置默认ajax请求失败处理方法
 $.ajaxSetup({
 	error: function(data, status, exception){

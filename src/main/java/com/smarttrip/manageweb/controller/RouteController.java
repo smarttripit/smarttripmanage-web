@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.smarttrip.domain.Route;
+import com.smarttrip.domain.RouteTheme;
 import com.smarttrip.domain.Theme;
 import com.smarttrip.manageweb.common.Result;
 import com.smarttrip.service.IRouteService;
@@ -188,7 +189,7 @@ public class RouteController {
 	}
 	
 	/**
-	 * 跳转到线路修改页面
+	 * 跳转到线路修改/创建页面
 	 * @author songjiesdnu@163.com
 	 * @param request
 	 * @param model
@@ -197,15 +198,30 @@ public class RouteController {
 	 */
 	@RequestMapping("/updateRoutePage")
 	public String updateRoutePage(HttpServletRequest request,Model model,
-								  @RequestParam(value="routeId") String routeId){
+								  @RequestParam(value="routeId", required=false) String routeId){
 		logger.debug("进入updateRoutePage方法");
 		logger.debug("routeId:" + routeId);
+		if(routeId != null  &&  !routeId.equals("")){
+			Route route = routeService.selectByPrimaryKey(routeId);
+			model.addAttribute("route", route);
+			//该条线路所属的主题
+			List<RouteTheme> routeThemes = routeThemeService.selectByRouteId(routeId);
+			String selectedThemes = "";
+			if(routeThemes != null  &&  routeThemes.size() > 0){
+				for(RouteTheme rt : routeThemes){
+					selectedThemes += rt.getThemeId() + "|";
+				}
+				model.addAttribute("selectedThemes", selectedThemes);
+			}
+		}
+		List<Theme> themeList = themeService.selectAll();
+		model.addAttribute("themes", themeList);//所有的主题
 		logger.debug("退出updateRoutePage方法");
 		return "route/updateRoutePage";
 	}
 
 	/**
-	 * 跳转到的经典线路的详情业、页
+	 * 跳转到的经典线路的详情页
 	 * @author songjiesdnu@163.com
 	 * @param request
 	 * @param model
@@ -218,13 +234,6 @@ public class RouteController {
 		logger.debug("进入routeDetail方法");
 		logger.debug("routeId:" + routeId);
 		Route route = routeService.selectByPrimaryKey(routeId);
-		if(route == null){
-			route = new Route();
-			route.setName("爨底下村");
-			route.setFeature("feature特色");
-			route.setBackgroundImg("http://avatar.csdn.net/7/1/2/1_problc.jpg");
-			route.setBookingNotice("预定须知");
-		}
 		model.addAttribute("route", route);
 		logger.debug("退出routeDetail方法");
 		return "route/routeDetail";

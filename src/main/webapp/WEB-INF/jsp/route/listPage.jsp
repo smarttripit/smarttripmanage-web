@@ -117,10 +117,11 @@
 			          {title:'购买数',field:'purchaseCount',width:25,hidden:true},
 			          {title:'显示顺序',field:'displayOrder',width:25},
 			          {title:'状态',field:'status',width:60,hidden:true},
-			          {title:'操作',field:'id',width:25,align:'center',
+			          {title:'操作',field:'operation',width:25,align:'center',
 			  			formatter : function(value, row, index) {
+			  				console.log(row);
 			  				var opt='';
-			  				opt += '<a href="javascript:void(0);" val="'+value+'" onclick="showRouteDetails(\''+value +'\')" class="easyui-linkbutton">详情</a>';
+			  				opt += '<a href="javascript:void(0);" val="'+value+'" onclick="showRouteDetails(\''+ row.routeId +'\')" class="easyui-linkbutton">详情</a>';
 			  				opt += '';
 			  				return opt;
 			  			} 
@@ -162,7 +163,7 @@
 	
 	// 新建一条经典线路
 	function createOneRoute(){
-		self.parent.addTab("新建：经典线路", "/route/newRoutePage");
+		self.parent.addTab("新建：经典线路", "/route/updateRoutePage");
 	}
 	
 	// 修改一条经典线路

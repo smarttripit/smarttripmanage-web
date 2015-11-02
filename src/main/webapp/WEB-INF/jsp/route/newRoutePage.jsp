@@ -2,8 +2,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<%@include file="../common/header.jsp" %>
 <meta charset="UTF-8">
+<%@include file="../common/header.jsp" %>
 <title>新建经典线路</title>
 <style type="text/css">
 	form div{
@@ -56,15 +56,15 @@
 		//初始化ckeditor
 		CKEDITOR.replace( 'detail',
 				{
-			        customConfig : '/static/framework/custom/ckeditor_config.js'
+			        customConfig : ckeditorConfigFile
 			    });
 		CKEDITOR.replace( 'feeDescription',
 				{
-			        customConfig : '/static/framework/custom/ckeditor_config.js'
+			        customConfig : ckeditorConfigFile
 			    });
 		CKEDITOR.replace( 'bookingNotice',
 				{
-			        customConfig : '/static/framework/custom/ckeditor_config.js'
+			        customConfig : ckeditorConfigFile
 			    });
 		// 绑定“创建”按钮的click事件
 		$("#btnCreate").bind("click", function(){
