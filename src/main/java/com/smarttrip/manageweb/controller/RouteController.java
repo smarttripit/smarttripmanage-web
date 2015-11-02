@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.smarttrip.domain.Route;
+import com.smarttrip.domain.Theme;
 import com.smarttrip.manageweb.common.Result;
 import com.smarttrip.service.IRouteService;
 import com.smarttrip.service.IRouteThemeService;
+import com.smarttrip.service.IThemeService;
 import com.smarttrip.util.UUIDUtils;
 
 
@@ -34,6 +36,10 @@ public class RouteController {
 	
 	@Autowired
 	private IRouteThemeService routeThemeService;
+	
+	@Autowired
+	private IThemeService themeService;
+	
 	/**
 	 * 跳转到新建经典线路的页面
 	 * @author songjiesdnu@163.com
@@ -55,6 +61,9 @@ public class RouteController {
 	 */
 	@RequestMapping("/listPage")
 	public String listPage(HttpServletRequest request,Model model){
+		List<Theme> themeList = themeService.selectAll();
+		model.addAttribute("themes", themeList);
+		
 		return "route/listPage";
 	}
 	
@@ -111,6 +120,7 @@ public class RouteController {
 		List<Map<String, String>> rowData = new ArrayList<Map<String, String>>();
 		for(int i=0; i<rows; i++){
 			Map<String, String> oneRow = new HashMap<String, String>();
+			oneRow.put("routeId", "123456");
 			oneRow.put("name", "爨底下黄岭西");
 			oneRow.put("feature", "农村特色农村特色农村特色农村特色农村特色农村特色");
 			oneRow.put("theme", "农村-亲子");
@@ -175,6 +185,49 @@ public class RouteController {
 			result.setStatus("failed");
 			return result;
 		}
+	}
+	
+	/**
+	 * 跳转到线路修改页面
+	 * @author songjiesdnu@163.com
+	 * @param request
+	 * @param model
+	 * @param routeId
+	 * @return
+	 */
+	@RequestMapping("/updateRoutePage")
+	public String updateRoutePage(HttpServletRequest request,Model model,
+								  @RequestParam(value="routeId") String routeId){
+		logger.debug("进入updateRoutePage方法");
+		logger.debug("routeId:" + routeId);
+		logger.debug("退出updateRoutePage方法");
+		return "route/updateRoutePage";
+	}
+
+	/**
+	 * 跳转到的经典线路的详情业、页
+	 * @author songjiesdnu@163.com
+	 * @param request
+	 * @param model
+	 * @param routeId
+	 * @return
+	 */
+	@RequestMapping("/routeDetail")
+	public String routeDetail(HttpServletRequest request,Model model,
+								  @RequestParam(value="routeId") String routeId){
+		logger.debug("进入routeDetail方法");
+		logger.debug("routeId:" + routeId);
+		Route route = routeService.selectByPrimaryKey(routeId);
+		if(route == null){
+			route = new Route();
+			route.setName("爨底下村");
+			route.setFeature("feature特色");
+			route.setBackgroundImg("http://avatar.csdn.net/7/1/2/1_problc.jpg");
+			route.setBookingNotice("预定须知");
+		}
+		model.addAttribute("route", route);
+		logger.debug("退出routeDetail方法");
+		return "route/routeDetail";
 	}
 	
 	/**
