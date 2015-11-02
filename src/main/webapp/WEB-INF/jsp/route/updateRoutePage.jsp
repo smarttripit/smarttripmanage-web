@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <%@include file="../common/header.jsp" %>
-<title>新建经典线路</title>
+<title>修改/新建经典线路</title>
 <style type="text/css">
 	form div{
 		margin:10px 0;
@@ -16,37 +16,52 @@
 </head>
 <body>
 	<form id="createRouteForm" method="post">
+		<!-- routeId为空：新建  routeId不为空：修改 -->
+		<input type="hidden" value="${route.routeId}" />
         <div>
             <label>名称：</label>
-            <input class="easyui-validatebox" type="text" id="name" name="name" data-options="required:true" />
+            <input class="easyui-validatebox" type="text" id="name" name="name" data-options="required:true" value="${route.name}" />
         </div>
         <div>
             <label>特色：</label>
-            <input class="easyui-validatebox" type="text" id="feature" name="feature" data-options="required:true" />
+            <input class="easyui-validatebox" type="text" id="feature" name="feature" data-options="required:true" value="${route.feature}" />
         </div>
         <div>
             <label>天数：</label>
-            <input class="easyui-validatebox" type="text" id="period" name="period" data-options="required:true" />
+            <input class="easyui-validatebox" type="text" id="period" name="period" data-options="required:true" value="${route.period}" />
+        </div>
+        <div>
+            <label>主题：</label>
+            <c:forEach items="${themes}" var="theme">
+		    	<c:choose>
+		   			<c:when test="${fn:contains(selectedThemes, theme.themeId)}">
+		   				<input name="theme" type="checkbox" checked value="${theme.themeId}">${theme.name}</input>
+		   			</c:when>  
+		   			<c:otherwise>
+		   				<input name="theme" type="checkbox" value="${theme.themeId}">${theme.name}</input>
+		   			</c:otherwise> 
+				</c:choose>
+			</c:forEach>
         </div>
         <div>
             <label>简短推荐理由：</label>
-            <input class="easyui-validatebox" type="text" id="briefRecommendation" name="briefRecommendation" data-options="required:true" />
+            <input class="easyui-validatebox" type="text" id="briefRecommendation" name="briefRecommendation" data-options="required:true" value="${route.briefRecommendation}" />
         </div>
         <div>
             <label>费用说明：</label>
-            <textarea rows="30" cols="50" id="feeDescription" name="feeDescription"></textarea>
+            <textarea rows="30" cols="50" id="feeDescription" name="feeDescription">${route.feeDescription}</textarea>
         </div>
         <div>
             <label>预定须知：</label>
-            <textarea rows="30" cols="50" id="bookingNotice" name="bookingNotice"></textarea>
+            <textarea rows="30" cols="50" id="bookingNotice" name="bookingNotice">${route.bookingNotice}</textarea>
         </div>
         <div>
             <label>线路详情：</label>
-            <textarea rows="30" cols="50" id="detail" name="detail"></textarea>
+            <textarea rows="30" cols="50" id="detail" name="detail">${route.detail}</textarea>
         </div>
         
 		<div>
-			<a href="#" class="easyui-linkbutton" id="btnCreate">提交</a>
+			<a href="#" id="btnCreate" class="easyui-linkbutton" style="padding:5px 10px;font-size:16px;">提交</a>
 		</div>
     </form>
     
