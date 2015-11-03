@@ -1,84 +1,195 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<%@include file="../common/header.jsp" %>
 <meta charset="UTF-8">
-<title>后台管理系统-香油网络</title>
+<title>游客信息列表页</title>
 <style type="text/css">
 </style>
-<link rel="stylesheet" type="text/css"
-	href="${contextPath}/static/framework/jeasyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css"
-	href="${contextPath}/static/framework/jeasyui/themes/icon.css">
-<script type="text/javascript"
-	src="${contextPath}/static/framework/jeasyui/jquery.min.js"></script>
-<script type="text/javascript"
-	src="${contextPath}/static/framework/jeasyui/jquery.easyui.min.js"></script>
 </head>
 <body>
-	<table id="tt" class="easyui-datagrid" style="width:100%;height:auto;"
-		data-options="
-			url:'/visitor/getVisitorByPage',
-			fitColumns:true,
-			singleSelect:true,
-			toolbar:'#toolbar',
-			fit:true,
-			rownumbers:true,
-			pagination:true">
-	<thead>
-		<tr>
-			<th field="visitorId" width="50">游客ID</th>
-			<th field="name" width="50">用户名</th>
-			<th field="realName" width="50">真实姓名</th>
-			<th field="email" width="50">邮箱</th>
-			<th field="mobileNo" width="50">手机号</th>
-			<th field="status" width="50">游客状态</th>	
-		</tr>
-	</thead>
-</table>
-<div id="toolbar">
-	<div id="tb" style="padding:3px">
-	<span>用户名:</span>
-	<input id="name" style="line-height:26px;border:1px solid #ccc">
-	<span>手机号:</span>
-	<input id="mobileNo" style="line-height:26px;border:1px solid #ccc">
-	<span>邮箱:</span>
-	<input id="email" style="line-height:26px;border:1px solid #ccc">
-	<a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">查找</a>
-	<a href="#" class="easyui-linkbutton"  plain="true" onclick="changeStatus(1)">锁定</a>
-	<a href="#" class="easyui-linkbutton"  plain="true" onclick="changeStatus(0)">解锁</a>
+	<div class="easyui-layout" data-options="fit:true,selected:true">
+		<div class="datagrid-toolbar" data-options="region:'north',split:true,title:'查询'" style="height: 130px; padding: 20px 0px 10px 30px">
+			<form id="queryForm" method="post" novalidate>
+				<table class="datagrid-toolbar" style="width: 100%; height: 70%; border: 0px; font-size: 12px">
+					<tr class="itemMagin">
+						<!-- 查询条件：用户名 -->
+						<td>
+							<label for="qyVisitorName">用户名:</label>
+						</td>
+						<td>
+							<input id="qyVisitorName" name="qyVisitorName" class="easyui-validatebox" data-option="required:true" />
+						</td>
+						<!-- 查询条件：手机号 -->
+						<td>
+							<label for="qyVisitorMobileNo">手机号:</label>
+						</td>
+						<td>
+							<input id="qyVisitorMobileNo" name="qyVisitorMobileNo" class="easyui-validatebox" data-option="required:true" />
+						</td>
+						<!-- 查询条件：邮箱 -->
+						<td>
+							<label for="qyVisitorEmail">邮箱:</label>
+						</td>
+						<td>
+							<input id="qyVisitorEmail" name="qyVisitorEmail" class="easyui-validatebox" data-option="required:true" />
+						</td>
+						<td><a href="#" class="easyui-linkbutton" iconCls="icon-search" id="btnQuery">查询</a> 
+							<a href="#"	class="easyui-linkbutton" iconCls="icon-undo" id="btnCancel">清空</a>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div data-options="region:'center',border:true,title:'列表'">
+			<table id="visitorList">
+			</table>
+		</div>
 	</div>
-</div>
+	<script type="text/javascript">
+	// 页面加载完毕执行
+	$(document).ready(function() {
+		// 绑定“查询”按钮的click事件
+		$("#btnQuery").bind("click", function(){
+			queryInfo();
+		});
+		// 绑定“清空”按钮的click事件
+		$("#btnCancel").bind("click", function(){
+			queryCancel();
+		});
 
-<script type="text/javascript">
-function doSearch(){
-	$('#tt').datagrid('load',{
-		name: $('#name').val(),
-		mobileNo: $('#mobileNo').val(),
-		email: $('#email').val()
+		// 初始化数据网格
+		initVisitorGrid();
 	});
-}
 
-function changeStatus(status){
-	var row = $('#tt').datagrid('getSelected');
-	if (row){
-		$.messager.defaults = { ok: "确认", cancel: "取消" };
-		$.messager.confirm('确定','您确定更改游客状态吗?',function(r){
-			if (r){
-				$.post('/visitor/reviseVisitorStatus',{visitorId:row.visitorId,status:status},function(result){
-					if (result.status == "success"){
-						$('#tt').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.show({	// show error message
-							title: 'Error',
-							msg: result.tipCode
-						});
+	// 查询
+	function queryInfo(){
+		// 按照查询条件重新加载列表数据
+		$('#visitorList').datagrid('load',{
+		name: $('#qyVisitorName').val(),
+		mobileNo: $('#qyVisitorMobileNo').val(),
+		email: $('#qyVisitorEmail').val()
+	});
+	}
+	
+	// 取消查询
+	function queryCancel(){
+		$('#queryForm').form('clear');
+	}
+	
+	// 分页显示经典线路信息
+	function initVisitorGrid(){
+		$("#visitorList").datagrid({
+			pagination:true,
+			rownumbers:true,
+			pageSize:10,
+			pageList:[10,20,50],
+			nowrap:false,
+			autoRowHeight:false,
+			striped:true,
+			border:false,
+			fitColumns:true,
+			method:'post',
+			singleSelect:false,
+			fit:true,
+			url: '/visitor/getVisitorByPage',
+			onDblClickRow:function(rowIndex, rowData){
+
+			},
+			columns:[[
+					  {title:'主键',field:'visitorId',width:100,checkbox:true},
+					  {title:'用户名',field:'name',width:100},
+					  {title:'真实姓名',field:'realName',width:25},
+					  {title:'真实姓名保密否',field:'realNameSecret',width:25,hidden:true},
+					  {title:'昵称',field:'nickName',width:25},
+			          {title:'邮箱',field:'email',width:25,hidden:true},
+			          {title:'邮箱是否激活',field:'emailActivated',width:25},
+			          {title:'手机',field:'mobileNo',width:60},
+			          {title:'状态',field:'status',width:60},
+			          {title:'操作',field:'operation',width:25,align:'center',
+			  			formatter : function(value, row, index) {
+			  				console.log(row);
+			  				var opt='';
+			  				opt += '<a href="javascript:void(0);" val="'+value+'" onclick="showVisitorDetails(\''+ row.visitorId +'\')" class="easyui-linkbutton">详情</a>';
+			  				opt += '';
+			  				return opt;
+			  			} 
+			          }
+			      ]],
+			toolbar:[
+			        {
+					    text:'锁定',
+			            iconCls:'icon-cancel',
+			            handler:function(){
+			            	changeVisitorStatus('0');//停用一条经典线路
+				        }
 					}
-				},'json');
-			}
+					,
+			        {
+					    text:'解锁',
+			            iconCls:'icon-ok',
+			            handler:function(){
+			            	changeVisitorStatus('1');//启用一条经典线路
+				        }
+					}
+			]
 		});
 	}
-}
+	
+	
+	// 锁定/解锁一名游客
+	function changeVisitorStatus(status){
+		var rows = $('#visitorList').datagrid('getSelections');
+		if(rows.length == 0){
+			showSlideMessage("请选择至少一名游客！");
+			return;
+		}
+		
+		var visitorIds = [];
+		for(var i = 0;i<rows.length;i++){
+			visitorIds.push(rows[i].visitorId);
+		}
+		// 拼接需要发布
+		var visitorIds = visitorIds.join(',');
+		
+		$.messager.confirm('确认','你确定要执行该操作吗?',function(r){
+	        if (r){
+	        	jQuery.ajax({
+	    			type : "POST",
+	    	        async: false,
+	    	        url : "/visitor/reviseVisitorStatus",
+	    	        data : {
+	    	        	visitorIds:visitorIds,
+	    	        	status:status
+	    	        },
+	    	        success : function(result) {
+	    	          if(result.status=='success'){
+	    	        	  if(status == '0'){
+	    	        		  showSlideMessage("游客已被锁定");
+	    	        	  }else if(status == '1'){
+	    	        		  showSlideMessage("游客已被解锁");
+	    	        	  }
+	    	        	  // 重新加载
+	    	        	  $('#visitorList').datagrid('reload');
+	    	           }else{
+	    	        	   showSlideMessage("操作失败！");
+	    	           }
+	    	        },
+	    	        error : function(result) {
+	    	        	showSlideMessage("出现错误，请确认！");
+	    	        },
+	    	        datatype : "json"
+	        	});
+	        }
+	    });
+	}
+	
+	// 显示一条经典线路的详细信息
+	function showVisitorDetails(visitorId){
+		self.parent.addTab("详情：游客信息详情", "/visitor/visitorDetail?visitorId=" + visitorId);
+	}
 </script>
 </body>
 </html>
