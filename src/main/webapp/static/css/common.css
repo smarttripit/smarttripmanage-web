@@ -3,6 +3,10 @@ body{
 	font-size:12px;
 	font-family:微软雅黑;
 }
+a{
+	color:blue;
+}
+
 
 /* CSS Document */
 /*----- 基本模块 开始-----*/
