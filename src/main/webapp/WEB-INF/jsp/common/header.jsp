@@ -7,5 +7,6 @@
 <link rel="stylesheet" type="text/css" href="/static/framework/jeasyui/themes/icon.css">
 <script type="text/javascript" src="/static/framework/jeasyui/jquery.min.js"></script>
 <script type="text/javascript" src="/static/framework/jeasyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/static/locale/easyui-lang-zh_CN.js"></script>
 <script src="/static/framework/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="/static/js/common.js"></script>
