@@ -31,10 +31,10 @@
 						</td>
 						<!-- 查询条件：评论产品 -->
 						<td>
-							<label for="qyCommentProduct">评论产品:</label>
+							<label for="qyCommentProductType">评论产品:</label>
 						</td>
 						<td>
-							<input id="qyCommentProduct" name="qyCommentProduct" class="easyui-validatebox" data-option="required:true" />
+							<input id="qyCommentProductType" name="qyCommentProductType" class="easyui-validatebox" data-option="required:true" />
 						</td>
 						<!-- 查询条件：评论时间 -->
 						<td>
@@ -76,9 +76,9 @@
 	function queryInfo(){
 		// 按照查询条件重新加载列表数据
 		$('#commentList').datagrid('load',{
-			name: $('#qyVisitorName').val(),
+			visitorName: $('#qyVisitorName').val(),
 			content: $('#qyCommentContent').val(),
-			productType: $('#qyCommentProduct').val(),
+			productType: $('#qyCommentProductType').val(),
 			commentBeginTime: $('#qyCommentBeginTime').datetimebox('getValue'),
 			commentEndTime: $('#qyCommentEndTime').datetimebox('getValue')
 		});
@@ -112,7 +112,7 @@
 			},
 			columns:[[
 					  {title:'主键',field:'commentId',width:100,checkbox:true},
-					  {title:'游客名称',field:'visitorId',width:100},
+					  {title:'游客名称',field:'visitorName',width:100},
 					  {title:'评论产品',field:'productType',width:100},
 			          {title:'操作',field:'operation',width:25,align:'center',
 			  			formatter : function(value, row, index) {
