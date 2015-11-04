@@ -4,7 +4,7 @@
 <head>
 <%@include file="common/header.jsp" %>
 <meta charset="UTF-8">
-<title>后台管理系统-香油网络</title>
+<title>后台管理系统-周游趣</title>
 </head>
 <body>
 	<div class="easyui-layout" style="width: 100%; height:100%;">
